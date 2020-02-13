@@ -1,0 +1,39 @@
+.bet-head {
+  position: relative;
+  background-color: #343a40;
+  background: url("../img/bg-masthead.jpg") no-repeat center center;
+  background-size: cover;
+  padding-top: .1rem;
+  padding-bottom: .1rem;
+}
+
+.bet-head .overlay {
+  position: absolute;
+  background-color: #212529;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0.3;
+}
+
+.bet-features-icons {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.bet-features-icons .bet-features-icons-item {
+  max-width: 20rem;
+}
+
+.bet-features-icons .bet-features-icons-item .bet-features-icons-icon {
+  height: 7rem;
+}
+
+.bet-features-icons .bet-features-icons-item .bet-features-icons-icon i {
+  font-size: 4.5rem;
+}
+
+.bet-features-icons .bet-features-icons-item:hover .bet-features-icons-icon i {
+  font-size: 5rem;
+}
