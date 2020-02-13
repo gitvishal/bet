@@ -8,5 +8,5 @@ urlpatterns = [
 	path('employee/', include('master.viewsets.employee.urls')),
 	path('onlineplayer/', include('master.viewsets.onlineplayer.urls')),
 	path('agent/', include('master.viewsets.agent.urls')),
-	path('admin/', include('master.viewsets.admin.urls')),
+	# path('admin/', include('master.viewsets.admin.urls')),
 ]
