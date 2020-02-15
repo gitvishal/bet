@@ -1,26 +1,35 @@
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site 
+from django.views.generic.edit import FormView
 from registration.backends.default.views import RegistrationView as BaseRegistrationView
 from django.views.generic import TemplateView
 from django.utils import timezone
-from .forms import RegistrationForm
+from .forms import AgentRegistrationURLForm, RegistrationURLForm
 from django.core import signing
 from django.db import transaction
 from master.models import User
-from django.core.signing import loads, SignatureExpired
+from django.core.signing import loads, SignatureExpired, dumps
 from django.core.exceptions import DisallowedHost, PermissionDenied
+from master.utils.queryset import get_instance_or_none
+from django.contrib.auth.forms import UserCreationForm
 
 class RegistrationView(BaseRegistrationView):
 	model = User
-	form_class = RegistrationForm
+	form_class = UserCreationForm
 	one_to_one_model = None
+	parent_model = None
 	success_url = None
 
 	def extract_data(self):
 		try:
 			payload = loads(self.token, max_age=timezone.timedelta(hours=8))
-			parent_user = User.objects.get(email=payload['email'], user_type=payload['parent_user_type'])
+			parent_user = self.parent_model.objects.get(
+				user__email=payload['parent_email'], 
+				user__user_type=payload['parent_user_type']
+			)
 
-		except User.DoesNotExist as e:
+		except self.parent_model.DoesNotExist as e:
 			raise PermissionDenied('Super user Does Not Exist') from e
 		except SignatureExpired as e:
 			raise DisallowedHost("Link is expired. Request a new link") from e
@@ -35,33 +44,38 @@ class RegistrationView(BaseRegistrationView):
 		parent_user, payload = self.extract_data()
 		user = super().register(form)
 		user.user_type = payload['user_type']
+		user.email = payload['user_email']
 		user.save()
 		self.one_to_one_model.objects.create(user=user, parent=parent_user, designation=payload['designation'])
 		return user
 
+class RegistrationURLView(FormView):
+	form_class = RegistrationURLForm
+	email_template_name = 'master/email/activation_email.html'
+	template_name = 'master/registration_form_email.html'
 
-# from django.shortcuts import render
-# from django.views.generic import View, RedirectView
-# from django.utils.decorators import method_decorator
-# from django.contrib.auth.decorators import login_required
-# from django.conf import settings
-# from django.urls import reverse_lazy
-# from django.core.exceptions import PermissionDenied
+	def email_context(self, form):
+		return {
+			'site' : get_current_site(self.request),
+			'parent_email' : self.request.user.email,
+			'parent_user_type' : self.request.user.user_type,
+			'user_email' : form.cleaned_data['email'],
+			'designation' : form.cleaned_data['designation'],
+			'user_type' : form.cleaned_data['user_type'],
+		}
 
-# @method_decorator([login_required(login_url=settings.LOGIN_URL),], name='dispatch')
-# class RegistrationRemoteRedirectView(RedirectView):
-# 	def get_redirect_url(self, *args, **kwargs):
-# 		if self.request.user.is_superuser:
-# 			return reverse_lazy('admin:index')
-# 		elif self.request.user.remoteuser.user_type.user_role == 'STUDENT':
-# 			return reverse_lazy('student:index')
-# 		elif self.request.user.remoteuser.user_type.user_role == 'FACULTY':
-# 			return reverse_lazy('faculty:index')
-# 		elif self.request.user.remoteuser.user_type.user_role == 'CO-ORDINATOR':
-# 			return reverse_lazy('coordinator:index')
-# 		elif self.request.user.remoteuser.user_type.user_role == 'CORPORATE-CLIENT':
-# 			return reverse_lazy('corporate_client:index')
-# 		elif self.request.user.remoteuser.user_type.user_role == 'MASTER-CO-ORDINATOR':
-# 			return reverse_lazy('master_coordinator:index')
-# 		else:
-# 			raise PermissionDenied
+	def form_valid(self, form):
+		context=self.email_context(form)
+		token = dumps(context)
+		context['token'] = token
+		subject = 'Registration form for site {site}'.format(**context)
+		form.send_email(subject, render_to_string(self.email_template_name, context=context))
+		return super().form_valid(form)
+
+class AgentRegistrationURLView(FormView):
+	form_class = AgentRegistrationURLForm
+	
+	def email_context(self, form):
+		context = super().email_context(form)
+		context['commission'] = form.cleaned_data['commission']
+		return context

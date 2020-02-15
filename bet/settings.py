@@ -181,3 +181,12 @@ THUMBNAIL_ALIASES = {
 		'avatar': {'size': (500, 500), 'crop': True},
 	},
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'saugamya.goa@gmail.com'
+EMAIL_HOST_PASSWORD = 'Vish@l%2143'
+DEFAULT_FROM_EMAIL = 'saugamya.goa@gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #thhis is for testing remove on prod move

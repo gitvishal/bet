@@ -38,6 +38,15 @@ class User(AbstractUser):
 	)
 
 	ALL_STAFF_USER = [MANAGER, SUPERVISOR, ADMIN, EMPLOYEE]
+	ALL_AGENTS = [AGENT, SUB_AGENT]
+
+	PERMISSION_USER_CREATION = {
+		ADMIN: [(MANAGER, 'manager'),],
+		MANAGER: [(SUPERVISOR, 'supervisor'),],
+		SUPERVISOR: [(EMPLOYEE, 'employee'),],
+		AGENT:[(SUB_AGENT, 'sub agent'),],
+		SUB_AGENT:[(SUB_AGENT, 'sub agent'),],
+	}
 
 	user_type = models.PositiveSmallIntegerField(choices=ROLE_CHOICES)
 	username = PhoneNumberField(_('mobile'), unique=True, 
@@ -73,7 +82,7 @@ class Supervisor(UserProfile):
 	PARENT_USER_TYPE = User.MANAGER
 	user = models.OneToOneField(User, related_name='%(class)s_supervisor', 
 		on_delete=models.PROTECT, verbose_name=_('Supervisor'))
-	parent = models.ForeignKey(User, related_name='%(class)s_manager', 
+	parent = models.ForeignKey(Manager, related_name='%(class)s_manager', 
 		on_delete=models.PROTECT, verbose_name=_('Manager'))
 
 class Employee(UserProfile):

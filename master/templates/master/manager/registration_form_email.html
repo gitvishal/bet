@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block container %}
+	<h1>Agent Registration Url generation Form:</h1>
+	<form method="post" id='url-email-form'>
+		<table>
+			{{form.as_table}}
+		</table>
+		<button></button>
+	</form>
+	<button type="submit" form="url-email-form" value="Submit">Submit</button> 
+{% endblock %}
