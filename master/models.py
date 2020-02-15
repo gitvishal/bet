@@ -60,6 +60,11 @@ class User(AbstractUser):
 	USERNAME_FIELD = 'username'
 	REQUIRED_FIELDS = ('email',)
 
+	def save(self, *args, **kwargs):
+		if self.is_superuser:
+			self.user_type = __class__.ADMIN
+		super().save(*args, **kwargs)
+
 class UserProfile(models.Model):
 	designation = models.CharField(max_length=70, default='no designation')
 	bank_details = encrypt(RichTextField(blank=True, null=True))
@@ -74,35 +79,79 @@ class UserProfile(models.Model):
 class Manager(UserProfile):
 	PARENT_USER_TYPE = User.ADMIN
 	user = models.OneToOneField(User, related_name='%(class)s_manager', 
-		on_delete=models.PROTECT, verbose_name=_('Manager'))
+		on_delete=models.PROTECT, verbose_name=_('Manager'),
+		limit_choices_to={'user_type': User.MANAGER})
 	parent = models.OneToOneField(User, related_name='%(class)s_admin', 
-		on_delete=models.PROTECT, verbose_name=_('Admin'))
+		on_delete=models.PROTECT, verbose_name=_('Admin'), 
+		limit_choices_to={'is_superuser':True, 'user_type': User.ADMIN})
+
+	class Meta:
+		permissions = (
+			("can_create_superpot", "can create superpot"),
+			("can_update_superpot", "can update superpot"),
+			("can_delete_superpot", "can delete superpot"),
+			("can_manage_user", "can manage user"),
+			("can_manage_bank_details", "can manage bank details"),
+		)
 	
 class Supervisor(UserProfile): 
 	PARENT_USER_TYPE = User.MANAGER
 	user = models.OneToOneField(User, related_name='%(class)s_supervisor', 
-		on_delete=models.PROTECT, verbose_name=_('Supervisor'))
+		on_delete=models.PROTECT, verbose_name=_('Supervisor'),
+		limit_choices_to={'user_type': User.SUPERVISOR})
 	parent = models.ForeignKey(Manager, related_name='%(class)s_manager', 
-		on_delete=models.PROTECT, verbose_name=_('Manager'))
+		on_delete=models.PROTECT, verbose_name=_('Manager'),
+		limit_choices_to={'user_type': User.MANAGER})
+
+	class Meta:
+		permissions = (
+			("can_create_superpot", "can create superpot"),
+			("can_update_superpot", "can update superpot"),
+			("can_delete_superpot", "can delete superpot"),
+			("can_manage_user", "can manage user"),
+			("can_manage_bank_details", "can manage bank details"),
+		)
 
 class Employee(UserProfile):
 	PARENT_USER_TYPE = User.SUPERVISOR
 	user = models.OneToOneField(User, related_name='%(class)s_employee', 
-		on_delete=models.PROTECT, verbose_name=_('Employee'))
+		on_delete=models.PROTECT, verbose_name=_('Employee'),
+		limit_choices_to={'user_type': User.EMPLOYEE})
 	parent = models.ForeignKey(Supervisor, related_name='%(class)s_supervisor', 
-		on_delete=models.PROTECT, verbose_name=_('Supervisor'))
+		on_delete=models.PROTECT, verbose_name=_('Supervisor'),
+		limit_choices_to={'user_type': User.SUPERVISOR})
+
+	class Meta:
+		permissions = (
+			("can_create_superpot", "can create superpot"),
+			("can_update_superpot", "can update superpot"),
+			("can_delete_superpot", "can delete superpot"),
+			("can_manage_user", "can manage user"),
+			("can_manage_bank_details", "can manage bank details"),
+		)
 
 class OnlinePlayer(UserProfile):
 	user = models.OneToOneField(User, related_name='%(class)s_player', 
-		on_delete=models.PROTECT, verbose_name=_('Player'))
+		on_delete=models.PROTECT, verbose_name=_('Player'),
+		limit_choices_to={'user_type': User.ONLINE_PLAYER})
+	monitoring_user = models.OneToOneField(User, related_name='%(class)s_player', 
+		on_delete=models.PROTECT, verbose_name=_('Player'),
+		limit_choices_to={'user_type__in': User.ALL_STAFF_USER})
 
 class Agent(UserProfile):
 	parent = models.ForeignKey(User, related_name='%(class)s_player', 
-		on_delete=models.PROTECT, verbose_name=_('Refered by'))
+		on_delete=models.PROTECT, verbose_name=_('Refered by'),
+		limit_choices_to={'user_type__in': User.ALL_STAFF_USER + User.ALL_AGENTS})
 	user = models.OneToOneField(User, related_name='%(class)s_agent', 
-		on_delete=models.PROTECT, verbose_name=_('Agent'))
+		on_delete=models.PROTECT, verbose_name=_('Agent'),
+		limit_choices_to={'user_type__in': User.ALL_AGENTS})
 	commission = models.FloatField(validators=[MinValueValidator(5), MaxValueValidator(50)],)
 	parent_node = TreeForeignKey('self', on_delete=models.PROTECT, null=True, blank=True, related_name='children')
+
+	class Meta:
+		permissions = (
+			("can_manage_child_node", "can manage child node"),
+		)
 
 	class MPTTMeta:
 		order_insertion_by = ('user',)
