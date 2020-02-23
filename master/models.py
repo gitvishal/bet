@@ -61,7 +61,7 @@ class User(AbstractUser):
 	REQUIRED_FIELDS = ('email',)
 
 	def __str__(self):
-		return str(self.username)
+		return str(self.email)
 
 	def save(self, *args, **kwargs):
 		if self.is_superuser:
@@ -101,7 +101,7 @@ class Supervisor(UserProfile):
 		limit_choices_to={'user_type': User.SUPERVISOR})
 	parent = models.ForeignKey(Manager, related_name='%(class)s_manager', 
 		on_delete=models.PROTECT, verbose_name=_('Manager'),
-		limit_choices_to={'user_type': User.MANAGER})
+		limit_choices_to={'user__user_type': User.MANAGER})
 
 	class Meta:
 		permissions = (
@@ -115,7 +115,7 @@ class Employee(UserProfile):
 		limit_choices_to={'user_type': User.EMPLOYEE})
 	parent = models.ForeignKey(Supervisor, related_name='%(class)s_supervisor', 
 		on_delete=models.PROTECT, verbose_name=_('Supervisor'),
-		limit_choices_to={'user_type': User.SUPERVISOR})
+		limit_choices_to={'user__user_type': User.SUPERVISOR})
 
 	class Meta:
 		permissions = (

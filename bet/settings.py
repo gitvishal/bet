@@ -32,8 +32,10 @@ ALLOWED_HOSTS = []
 
 THIRDPARTY_PRIOR_APPS = [
 	'django.contrib.sites',  
-	'registration',
+	'django.contrib.contenttypes',
+	'grappelli.dashboard',
 	'grappelli',
+	'registration',
 ]
 
 THIRDPARTY_APPS = [
@@ -53,7 +55,6 @@ BETTING_APPS = ['master', 'games',  'payments', ]
 DJANGO_APPS = [
 	'django.contrib.admin',
 	'django.contrib.auth',
-	'django.contrib.contenttypes',
 	'django.contrib.sessions',
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
@@ -190,3 +191,8 @@ EMAIL_HOST_USER = 'saugamya.goa@gmail.com'
 EMAIL_HOST_PASSWORD = 'Vish@l%2143'
 DEFAULT_FROM_EMAIL = 'saugamya.goa@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #thhis is for testing remove on prod move
+
+
+##### Admin Configuration ######################################
+GRAPPELLI_ADMIN_TITLE = 'Betting'                      #########
+################################################################
