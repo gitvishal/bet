@@ -73,6 +73,7 @@ class UserProfile(models.Model):
 	class Meta:
 		abstract = True
 
+
 	def __str__(self):
 		return str(self.designation)
 
@@ -87,13 +88,9 @@ class Manager(UserProfile):
 
 	class Meta:
 		permissions = (
-			("can_create_superpot", "can create superpot"),
-			("can_update_superpot", "can update superpot"),
-			("can_delete_superpot", "can delete superpot"),
-			("can_manage_user", "can manage user"),
-			("can_manage_bank_details", "can manage bank details"),
+			("can_verify_bank_details", "can verify bank details"),
 		)
-	
+
 class Supervisor(UserProfile): 
 	PARENT_USER_TYPE = User.MANAGER
 	user = models.OneToOneField(User, related_name='%(class)s_supervisor', 
@@ -105,11 +102,7 @@ class Supervisor(UserProfile):
 
 	class Meta:
 		permissions = (
-			("can_create_superpot", "can create superpot"),
-			("can_update_superpot", "can update superpot"),
-			("can_delete_superpot", "can delete superpot"),
-			("can_manage_user", "can manage user"),
-			("can_manage_bank_details", "can manage bank details"),
+			("can_verify_bank_details", "can verify bank details"),
 		)
 
 class Employee(UserProfile):
@@ -123,23 +116,23 @@ class Employee(UserProfile):
 
 	class Meta:
 		permissions = (
-			("can_create_superpot", "can create superpot"),
-			("can_update_superpot", "can update superpot"),
-			("can_delete_superpot", "can delete superpot"),
-			("can_manage_user", "can manage user"),
-			("can_manage_bank_details", "can manage bank details"),
+			("can_verify_bank_details", "can verify bank details"),
 		)
 
 class OnlinePlayer(UserProfile):
 	user = models.OneToOneField(User, related_name='%(class)s_player', 
 		on_delete=models.PROTECT, verbose_name=_('Player'),
 		limit_choices_to={'user_type': User.ONLINE_PLAYER})
-	monitoring_user = models.OneToOneField(User, related_name='%(class)s_player', 
-		on_delete=models.PROTECT, verbose_name=_('Player'),
-		limit_choices_to={'user_type__in': User.ALL_STAFF_USER})
+	monitoring_user = models.OneToOneField(User, related_name='%(class)s_moniter', 
+		on_delete=models.PROTECT, limit_choices_to={'user_type__in': User.ALL_STAFF_USER})
+
+	class Meta:
+		permissions = (
+			("can_handle_query_of_player", "can handle query of player"),
+		)
 
 class Agent(UserProfile):
-	parent = models.ForeignKey(User, related_name='%(class)s_player', 
+	parent = models.ForeignKey(User, related_name='%(class)s_referby', 
 		on_delete=models.PROTECT, verbose_name=_('Refered by'),
 		limit_choices_to={'user_type__in': User.ALL_STAFF_USER + User.ALL_AGENTS})
 	user = models.OneToOneField(User, related_name='%(class)s_agent', 
@@ -150,7 +143,7 @@ class Agent(UserProfile):
 
 	class Meta:
 		permissions = (
-			("can_manage_child_node", "can manage child node"),
+			("can_handle_query_of_agent", "can handle query of agent"),
 		)
 
 	class MPTTMeta:
