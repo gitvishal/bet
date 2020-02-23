@@ -12,7 +12,7 @@ from django_cryptography.fields import encrypt
 import uuid
 
 class IPAddressHistoricalModel(models.Model):
-	ip_address = models.GenericIPAddressField(_('IP address'))
+	ip_address = models.GenericIPAddressField(_('IP address'), blank=True, null=True)
 
 	class Meta:
 		abstract = True
@@ -59,6 +59,9 @@ class User(AbstractUser):
 	EMAIL_FIELD = 'email'
 	USERNAME_FIELD = 'username'
 	REQUIRED_FIELDS = ('email',)
+
+	def __str__(self):
+		return str(self.username)
 
 	def save(self, *args, **kwargs):
 		if self.is_superuser:
@@ -131,7 +134,7 @@ class OnlinePlayer(UserProfile):
 			("can_handle_query_of_player", "can handle query of player"),
 		)
 
-class Agent(UserProfile):
+class Agent(UserProfile, MPTTModel):
 	parent = models.ForeignKey(User, related_name='%(class)s_referby', 
 		on_delete=models.PROTECT, verbose_name=_('Refered by'),
 		limit_choices_to={'user_type__in': User.ALL_STAFF_USER + User.ALL_AGENTS})
