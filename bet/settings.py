@@ -48,6 +48,7 @@ THIRDPARTY_APPS = [
 	'simple_history',
 	'mptt',
 	'qr_code',
+	'crispy_forms',
 ]
 
 BETTING_APPS = ['master', 'games',  'payments', ]
@@ -192,7 +193,9 @@ EMAIL_HOST_PASSWORD = 'Vish@l%2143'
 DEFAULT_FROM_EMAIL = 'saugamya.goa@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #thhis is for testing remove on prod move
 
+##CRISPY FORM
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-##### Admin Configuration ######################################
-GRAPPELLI_ADMIN_TITLE = 'Betting'                      #########
-################################################################
+##### Admin Configuration 				
+GRAPPELLI_ADMIN_TITLE = 'Betting'                                  						
+GRAPPELLI_INDEX_DASHBOARD = 'bet.dashboard.CustomIndexDashboard'

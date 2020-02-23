@@ -54,6 +54,13 @@ class RegistrationURLView(FormView):
 	email_template_name = 'master/email/activation_email.html'
 	template_name = 'master/registration_form_email.html'
 
+	def get_form_kwargs(self):
+		kwargs = super().get_form_kwargs()
+		kwargs.update({
+			'user_type_choices': User.PERMISSION_USER_CREATION[self.request.user.user_type]
+		})
+		return kwargs
+
 	def email_context(self, form):
 		return {
 			'site' : get_current_site(self.request),
@@ -74,6 +81,13 @@ class RegistrationURLView(FormView):
 
 class AgentRegistrationURLView(FormView):
 	form_class = AgentRegistrationURLForm
+
+	def get_form_kwargs(self):
+		kwargs = super().get_form_kwargs()
+		kwargs.update({
+			'user_type_choices': [(User.AGENT, 'agent'),],
+		})
+		return kwargs
 	
 	def email_context(self, form):
 		context = super().email_context(form)
