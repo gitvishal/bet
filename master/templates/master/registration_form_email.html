@@ -1,12 +1,12 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block extrahead %}
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+{% endblock %}
 
 {% block container %}
-	<h1>Agent Registration Url generation Form:</h1>
-	<form method="post" id='url-email-form'>
-		<table>
-			{{form.as_table}}
-		</table>
-		<button></button>
-	</form>
-	<button type="submit" form="url-email-form" value="Submit">Submit</button> 
+	<h1>{{title}}:</h1>
+	{% crispy form %}
 {% endblock %}

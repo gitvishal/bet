@@ -53,11 +53,4 @@ class RegistrationURLForm(forms.Form):
 class AgentRegistrationURLForm(RegistrationURLForm):
 	commission = forms.FloatField(label=_('commission in percentage'), 
 		validators=[MinValueValidator(5), MaxValueValidator(50)])
-	designation = forms.CharField(label=_('Role'), initial="Agent")
-
-	# def __init__(self, *args, **kwargs):
-	# 	super().__init__(*args, **kwargs)
-	# 	self.fields['designation'].initial = 'Agent'
-	# 	self.fields['designation'].widget = forms.HiddenInput
-
-		
+	designation = forms.CharField(label=_('Role'), initial="Agent")	
