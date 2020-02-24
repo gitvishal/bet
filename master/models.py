@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
-from phonenumber_field.modelfields import PhoneNumberField
+from phonenumber_field.modelfields import PhoneNumberField as BasePhoneNumberField
+from phonenumber_field.formfields import PhoneNumberField  as PhoneNumberFormField
 from mptt.models import MPTTModel, TreeForeignKey
 from simple_history.models import HistoricalRecords
 from simple_history import register as history_register
@@ -10,6 +11,15 @@ from ckeditor.fields import RichTextField
 from jsonfield import JSONField
 from django_cryptography.fields import encrypt
 import uuid
+
+class PhoneNumberField(BasePhoneNumberField):
+	def formfield(self, **kwargs):
+		defaults = {
+			"form_class": PhoneNumberFormField,
+			"error_messages": self.error_messages,
+		}
+		defaults.update(kwargs)
+		return super(models.CharField, self).formfield(**defaults)
 
 class IPAddressHistoricalModel(models.Model):
 	ip_address = models.GenericIPAddressField(_('IP address'), blank=True, null=True)

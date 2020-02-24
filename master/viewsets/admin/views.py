@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 class RegistrationURLView(BaseRegistrationURLView):
 	template_name = 'master/admin/registration_form_email.html'
 	success_url = reverse_lazy('admin:index')
+	registration_path = 'master:users:manager:registration'
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -17,6 +18,7 @@ class RegistrationURLView(BaseRegistrationURLView):
 class AgentRegistrationURLView(BaseAgentRegistrationURLView):
 	template_name = 'master/admin/registration_form_email.html'
 	success_url = reverse_lazy('admin:index')
+	registration_path = 'master:users:agent:registration'
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)

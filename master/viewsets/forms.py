@@ -1,12 +1,28 @@
 from django import forms
-from master.models import User
-from django.core.mail import EmailMessage
+from django.core.mail import send_mail
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from master.utils.queryset import get_instance_or_none
 from registration.forms import RegistrationFormUniqueEmail
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MaxValueValidator, MinValueValidator
+from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget, PhoneNumberPrefixWidget
+from phonenumber_field.formfields import PhoneNumberField
+from django.contrib.auth.forms import UserCreationForm as BaseUserCreationForm
+from registration.users import UsernameField, UserModel
+from django.conf import settings
+
+User = UserModel()
+
+class UserCreationForm(BaseUserCreationForm):
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		if self._meta.model.USERNAME_FIELD in self.fields:
+			self.fields[self._meta.model.USERNAME_FIELD].widget = PhoneNumberPrefixWidget(
+				attrs={'class': 'form-control', 'autofocus': True})
+
+	class Meta(BaseUserCreationForm.Meta):
+		model = User
 
 class RegistrationForm(RegistrationFormUniqueEmail):
 	class Meta(RegistrationFormUniqueEmail.Meta):
@@ -31,9 +47,8 @@ class RegistrationURLForm(forms.Form):
 		return email
 
 	def send_email(self, subject, html_content):
-		msg = EmailMessage(subject, html_content, [self.cleaned_data['email']])
-		msg.content_subtype = "html"
-		msg.send(failed_silently=True)
+		send_mail(subject, html_content, settings.DEFAULT_FROM_EMAIL, 
+			[self.cleaned_data['email'],], fail_silently=False, html_message=html_content)
 
 class AgentRegistrationURLForm(RegistrationURLForm):
 	commission = forms.FloatField(label=_('commission in percentage'), 

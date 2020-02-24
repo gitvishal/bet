@@ -191,7 +191,12 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'saugamya.goa@gmail.com'
 EMAIL_HOST_PASSWORD = 'Vish@l%2143'
 DEFAULT_FROM_EMAIL = 'saugamya.goa@gmail.com'
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #thhis is for testing remove on prod move
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
 
 ##CRISPY FORM
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -199,3 +204,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 ##### Admin Configuration 				
 GRAPPELLI_ADMIN_TITLE = 'Betting'                                  						
 GRAPPELLI_INDEX_DASHBOARD = 'bet.dashboard.CustomIndexDashboard'
+
+#phone
+PHONENUMBER_DB_FORMAT = 'E164'
+PHONENUMBER_DEFAULT_REGION = 'IN'

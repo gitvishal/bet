@@ -5,14 +5,14 @@ from django.views.generic.edit import FormView
 from registration.backends.default.views import RegistrationView as BaseRegistrationView
 from django.views.generic import TemplateView
 from django.utils import timezone
-from .forms import AgentRegistrationURLForm, RegistrationURLForm
+from .forms import AgentRegistrationURLForm, RegistrationURLForm, UserCreationForm
 from django.core import signing
 from django.db import transaction
 from master.models import User
 from django.core.signing import loads, SignatureExpired, dumps
 from django.core.exceptions import DisallowedHost, PermissionDenied
 from master.utils.queryset import get_instance_or_none
-from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
 
 class RegistrationView(BaseRegistrationView):
 	model = User
@@ -20,6 +20,7 @@ class RegistrationView(BaseRegistrationView):
 	one_to_one_model = None
 	parent_model = None
 	success_url = None
+	registration_path = None
 
 	def extract_data(self):
 		try:
@@ -63,7 +64,7 @@ class RegistrationURLView(FormView):
 
 	def email_context(self, form):
 		return {
-			'site' : get_current_site(self.request),
+			'site' : get_current_site(self.request).name,
 			'parent_email' : self.request.user.email,
 			'parent_user_type' : self.request.user.user_type,
 			'user_email' : form.cleaned_data['email'],
@@ -75,11 +76,12 @@ class RegistrationURLView(FormView):
 		context=self.email_context(form)
 		token = dumps(context)
 		context['token'] = token
+		context['activation_url'] = reverse_lazy(self.registration_path, kwargs={'token':token})
 		subject = 'Registration form for site {site}'.format(**context)
 		form.send_email(subject, render_to_string(self.email_template_name, context=context))
 		return super().form_valid(form)
 
-class AgentRegistrationURLView(FormView):
+class AgentRegistrationURLView(RegistrationURLView):
 	form_class = AgentRegistrationURLForm
 
 	def get_form_kwargs(self):
