@@ -19,8 +19,7 @@ from django.urls import path, include
 urlpatterns = [
 	path('grappelli/', include('grappelli.urls')), # grappelli URLS
 	path('admin/', admin.site.urls),
-	# path('accounts/', include('registration.backends.default.urls')),
-    path('accounts/', include('registration.backends.simple.urls')),
+	path('accounts/', include('registration.backends.default.urls')),
 	path('bet/', include('master.urls')),
     path('games/', include('games.urls')),
     path('payment/', include('payments.urls')),

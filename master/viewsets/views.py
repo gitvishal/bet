@@ -4,57 +4,26 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.views.generic.edit import FormView
 from registration.backends.default.views import RegistrationView as BaseRegistrationView
 from django.views.generic import TemplateView
-from django.utils import timezone
 from .forms import AgentRegistrationURLForm, RegistrationURLForm, UserCreationForm
-from django.core import signing
-from django.db import transaction
 from master.models import User, Agent
-from django.core.signing import loads, SignatureExpired, dumps
 from django.core.exceptions import DisallowedHost, PermissionDenied
 from master.utils.queryset import get_instance_or_none
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse_lazy
-import sys
 
 class RegistrationView(BaseRegistrationView):
 	model = User
 	form_class = UserCreationForm
-	one_to_one_model = None
-	success_url = None
 	registration_path = None
 
-	def extract_data(self):
-
-		try:
-			payload = loads(self.token, max_age=timezone.timedelta(hours=8))
-		except SignatureExpired as e:
-			raise DisallowedHost("Link is expired. Request a new link") from e
-
-		parent_payload = payload['parent']
-		ParentModel = getattr(sys.modules[parent_payload['module']], parent_payload['model'])
-
-		try:
-			parent = ParentModel.objects.get(**parent_payload['params'])
-
-		except ParentModel.DoesNotExist as e:
-			raise PermissionDenied('Super user Does Not Exist') from e
-		return parent, payload
+	def get_form_kwargs(self):
+		kwargs = super().get_form_kwargs()
+		kwargs.update({'token': self.token})
+		return kwargs
 
 	def post(self, request, token, *args, **kwargs):
 		self.token = token
 		return super().post(request, *args, **kwargs)
-
-	@transaction.atomic
-	def register(self, form):
-		parent, payload = self.extract_data()
-		child_payload = payload['child']
-		user = super().register(form)
-		user.user_type = payload['user_type']
-		user.email = payload['user_email']
-		user.save()
-		ChildModel = getattr(sys.modules[child_payload['module']], child_payload['model'])
-		ChildModel.objects.create(user=user, parent=parent, **child_payload['params'])
-		return user
 
 class RegistrationURLView(FormView):
 	form_class = RegistrationURLForm
@@ -75,8 +44,8 @@ class RegistrationURLView(FormView):
 		return kwargs
 
 	def email_context(self, form):
+		
 		return {
-			'site' : get_current_site(self.request).name,
 			'user_email' : form.cleaned_data['email'],
 			'user_type' : form.cleaned_data['user_type'],
 		}
@@ -85,6 +54,8 @@ class RegistrationURLView(FormView):
 		context = self.email_context(form)
 		token = dumps(context)
 		context['token'] = token
+		context['site'] = get_current_site(self.request)
+		context['site_name'] = 'Online Betting',
 		context['activation_url'] = reverse_lazy(self.registration_path, kwargs={'token':token})
 		subject = 'Registration form for site {site}'.format(**context)
 		form.send_email(subject, render_to_string(self.email_template_name, context=context))
@@ -104,10 +75,7 @@ class AgentRegistrationURLView(RegistrationURLView):
 
 	def email_context(self, form):
 		context = super().email_context(form)
-		try:
-			agent = Agent.objects.get(user=self.request.user).pk
-		except Agent.DoesNotExist:
-			agent = None 
+		agent = get_instance_or_none(Agent, user=self.request.user)
 
 		context['parent'] = {
 			'module': User.__module__, 'model':User.__name__, 
@@ -115,10 +83,10 @@ class AgentRegistrationURLView(RegistrationURLView):
 		}
 		context['child'] = {
 			'module': Agent.__module__, 'model':Agent.__name__,
+			'parent_agent': {'pk':agent and agent.pk, 'agent_parent_param': 'parent_node'},
 			'params':{
 				'designation': form.cleaned_data['designation'], 
 				'commission':form.cleaned_data['commission'],
-				'parent_node': agent,
 			}
 		}
 		return context
