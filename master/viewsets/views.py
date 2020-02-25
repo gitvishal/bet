@@ -90,3 +90,6 @@ class AgentRegistrationURLView(RegistrationURLView):
 			}
 		}
 		return context
+
+class HomeView(TemplateView):
+	template_name = 'master/management_home.html'

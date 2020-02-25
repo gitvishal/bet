@@ -11,4 +11,4 @@ class RegistrationView(BaseRegistrationView):
 	success_url = reverse_lazy('master:users:onlineplayer:home')
 
 class HomeView(TemplateView):
-	template_name = 'index.html'
+	template_name = 'master/online_player/index.html'
