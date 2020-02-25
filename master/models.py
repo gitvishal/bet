@@ -63,6 +63,7 @@ class User(AbstractUser):
 		error_messages={
 			'unique': _("A user with that mobile already exists."),
 		},
+		help_text='specify region code. eg: +919876543291'
 	)
 	history = HistoricalRecords(bases=[IPAddressHistoricalModel,])
 

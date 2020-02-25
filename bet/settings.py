@@ -49,6 +49,7 @@ THIRDPARTY_APPS = [
 	'mptt',
 	'qr_code',
 	'crispy_forms',
+	'widget_tweaks',
 ]
 
 BETTING_APPS = ['master', 'games',  'payments', ]
