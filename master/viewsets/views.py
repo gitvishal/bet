@@ -3,13 +3,16 @@ from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site 
 from django.views.generic.edit import FormView
 from registration.backends.default.views import RegistrationView as BaseRegistrationView
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View, RedirectView
 from .forms import AgentRegistrationURLForm, RegistrationURLForm, UserCreationForm
 from master.models import User, Agent
 from django.core.exceptions import DisallowedHost, PermissionDenied
 from master.utils.queryset import get_instance_or_none
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
 
 class RegistrationView(BaseRegistrationView):
 	model = User
@@ -93,3 +96,6 @@ class AgentRegistrationURLView(RegistrationURLView):
 
 class HomeView(TemplateView):
 	template_name = 'master/management_home.html'
+
+
+

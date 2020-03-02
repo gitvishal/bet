@@ -4,6 +4,11 @@
 
 {% block title %}{% trans "Log in" %}{% endblock %}
 
+{% block nav %}
+    <li>{% trans "Not a member?" %} <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>.</li>
+    <li>{% trans "Forgot your password?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>.<li>
+{% endblock %}
+
 {% block container %}
 <form method="post" action="" class="form-vertical">
     <div class="module-head">

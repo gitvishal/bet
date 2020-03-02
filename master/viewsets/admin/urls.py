@@ -4,8 +4,7 @@ from . import views
 app_name = 'admin'
 
 urlpatterns = [
-	path('manager/registration-url/', views.RegistrationURLView.as_view(), 
-		name='manager-registration-url'),
+	path('register-user-send-email/', views.RegistrationURLView.as_view(), name='register-user-send-email'),
 	path('agent/registration-url/', views.AgentRegistrationURLView.as_view(), 
 		name='agent-registration-url'),
 ]
