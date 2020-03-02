@@ -4,6 +4,10 @@
 
 {% block title %}{% trans "Register for an account" %}{% endblock %}
 
+{% block nav %}
+	<li>{% trans "Sign In" %} <a href="{% url 'auth_login' %}">{% trans "Register" %}</a>.</li>
+{% endblock %}
+
 {% block container %}
 <form method="post" action="">
 	{% csrf_token %}

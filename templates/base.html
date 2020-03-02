@@ -29,10 +29,11 @@
 			  	</a>
 
 				<div class="nav-collapse collapse navbar-inverse-collapse">
-				
 					<ul class="nav pull-right">
+						{% block nav %}
 						<li>{% trans "Not a member?" %} <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>.</li>
-						<li>{% trans "Forgot your password?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>.li>
+						<li>{% trans "Forgot your password?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>.<li>
+						{% endblock %}
 					</ul>
 				</div><!-- /.nav-collapse -->
 			</div>
