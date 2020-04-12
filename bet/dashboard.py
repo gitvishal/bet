@@ -14,34 +14,61 @@ from grappelli.dashboard.utils import get_admin_site_name
 
 
 class CustomIndexDashboard(Dashboard):
-	"""
-	Custom index dashboard for www.
-	"""
 
 	def init_with_context(self, context):
 		site_name = get_admin_site_name(context)
 
-		# append a group for "Administration" & "Applications"
 		self.children.append(modules.Group(
 			_('All Betting Applications'),
 			column=1,
 			collapsible=True,
 			children = [
-				modules.AppList(
-					_('Applications'),
-					column=2,
-					css_classes=('collapse closed',),
-					exclude=('django.contrib.*',),
-				),
 				modules.ModelList(
 					_('Administration'),
 					column=1,
 					models=('django.contrib.*',),
 				),
+				modules.ModelList(
+					_('Hierarchy Users'),
+					column=1,
+					models=(
+						'master.models.users.Manager', 
+						'master.models.users.Supervisor',
+						'master.models.users.Employee',
+						'master.models.users.Agent',
+					),
+				),
+				modules.ModelList(
+					_('SuperPot'),
+					column=1,
+					models=(
+						'master.models.games.superpot.SuperPotEvent', 
+						'master.models.games.superpot.SuperPot',
+						'master.models.games.superpot.SuperPotSlip',
+						'master.models.games.superpot.AgentPlayerSuperPotBet',
+						'master.models.games.superpot.OnlinePlayerSuperPotBet',
+					),
+				),
+				modules.ModelList(
+					_('Players'),
+					column=1,
+					models=(
+						'master.models.users.OnlinePlayer', 
+						'master.models.users.AgentPlayer',
+					),
+				),
+				modules.ModelList(
+					_('Transactions'),
+					column=1,
+					models=(
+						'master.models.payments.AgentBalanceAccount', 
+						'master.models.payments.OnlinePlayerBalanceAccount',
+					),
+				),
+
 			]
 		))
 
-		# append another link list module for "support".
 		self.children.append(modules.LinkList(
 			_('Extra Admin Options'),
 			column=2,
@@ -56,8 +83,6 @@ class CustomIndexDashboard(Dashboard):
 				),
 			)
 		))
-
-		# append a feed module
 
 		self.children.append(modules.Group(
 			_('Latest Cricket Feeds'),
@@ -79,7 +104,6 @@ class CustomIndexDashboard(Dashboard):
 			]
 		))
 
-		# append a recent actions module
 		self.children.append(modules.RecentActions(
 			_('Recent Actions'),
 			limit=5,
