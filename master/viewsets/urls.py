@@ -1,9 +1,11 @@
 from django.urls import path, include
-from .views import AgentRegistrationURLView
+from .views import AgentRegistrationURLView, HomeRemoteRedirectView
 
 app_name = 'users'
 
 urlpatterns = [
+	path('home/', HomeRemoteRedirectView.as_view(), name='index'),
+	path('home-redirect/', HomeRemoteRedirectView.as_view(), name='home'),
 	path('manager/', include('master.viewsets.manager.urls')),
 	path('supervisor/', include('master.viewsets.supervisor.urls')),
 	path('employee/', include('master.viewsets.employee.urls')),
@@ -11,4 +13,5 @@ urlpatterns = [
 	path('agent/', include('master.viewsets.agent.urls')),
 	path('agent-registration/', AgentRegistrationURLView.as_view(), name='agent-register'),
 	path('admin/', include('master.viewsets.admin.urls')),
+	path('accounts/', include('registration.backends.simple.urls')),
 ]

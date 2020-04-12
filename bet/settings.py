@@ -52,7 +52,7 @@ THIRDPARTY_APPS = [
 	'widget_tweaks',
 ]
 
-BETTING_APPS = ['master', 'games',  'payments', ]
+BETTING_APPS = ['master',]
 
 DJANGO_APPS = [
 	'django.contrib.admin',

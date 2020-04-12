@@ -1,13 +1,14 @@
 from django.db import models
 from jsonfield import JSONField
 from simple_history.models import HistoricalRecords
-from master.models import IPAddressHistoricalModel, User, OnlinePlayer, Agent
+from .master import HistoricalModels
+from .users import OnlinePlayer, Agent, User
 from django_cryptography.fields import encrypt
 from django.utils.translation import ugettext_lazy as _
 from ckeditor.fields import RichTextField
 import uuid
 
-class Transaction(models.Model):
+class Transaction(HistoricalModels):
 
 	INPROCESS = 'inprocess'
 	SUCCESS = 'success'
@@ -25,12 +26,11 @@ class Transaction(models.Model):
 	meta_data = encrypt(JSONField(blank=True, null=True))
 	confirmed = models.BooleanField(default=False,)
 	status = models.CharField(max_length=45, choices=STATUS_CHOICES,)
-	history = HistoricalRecords(bases=[IPAddressHistoricalModel,])
 	
 	def __str__(self):
 		return str(self.transaction_id)
 
-class BalanceAccount(models.Model):
+class BalanceAccount(HistoricalModels):
 
 	CREDIT = 'credit'
 	DEBIT = 'debit'
@@ -39,7 +39,6 @@ class BalanceAccount(models.Model):
 	transaction = models.OneToOneField(Transaction, related_name='%(class)s_trans', on_delete=models.PROTECT)
 	transaction_type = models.CharField(max_length=45, choices=TRANSACTION_TYPE_CHOICES,)
 	created_on = models.DateTimeField(auto_now_add=True,)
-	history = HistoricalRecords(bases=[IPAddressHistoricalModel,], inherit=True)
 
 	class Meta:
 		abstract = True

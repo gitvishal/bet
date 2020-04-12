@@ -1,33 +1,15 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
-from phonenumber_field.modelfields import PhoneNumberField as BasePhoneNumberField
-from phonenumber_field.formfields import PhoneNumberField  as PhoneNumberFormField
-from mptt.models import MPTTModel, TreeForeignKey
-from simple_history.models import HistoricalRecords
-from simple_history import register as history_register
 from django.utils.translation import ugettext_lazy as _
 from ckeditor.fields import RichTextField
 from jsonfield import JSONField
 from django_cryptography.fields import encrypt
+from mptt.models import MPTTModel, TreeForeignKey
+from .master import PhoneNumberField, HistoricalModels
+from django.contrib.auth.models import AbstractUser
 import uuid
 
-class PhoneNumberField(BasePhoneNumberField):
-	def formfield(self, **kwargs):
-		defaults = {
-			"form_class": PhoneNumberFormField,
-			"error_messages": self.error_messages,
-		}
-		defaults.update(kwargs)
-		return super(models.CharField, self).formfield(**defaults)
-
-class IPAddressHistoricalModel(models.Model):
-	ip_address = models.GenericIPAddressField(_('IP address'), blank=True, null=True)
-
-	class Meta:
-		abstract = True
-
-class User(AbstractUser):
+class User(HistoricalModels, AbstractUser):
 
 	MANAGER = 1
 	SUPERVISOR = 2
@@ -65,7 +47,6 @@ class User(AbstractUser):
 		},
 		help_text='specify region code. eg: +919876543291'
 	)
-	history = HistoricalRecords(bases=[IPAddressHistoricalModel,])
 
 	EMAIL_FIELD = 'email'
 	USERNAME_FIELD = 'username'
@@ -79,14 +60,14 @@ class User(AbstractUser):
 			self.user_type = __class__.ADMIN
 		super().save(*args, **kwargs)
 
-class UserProfile(models.Model):
+
+
+class UserProfile(HistoricalModels):
 	designation = models.CharField(max_length=70, default='no designation')
 	bank_details = encrypt(RichTextField(blank=True, null=True))
-	history = HistoricalRecords(bases=[IPAddressHistoricalModel,], inherit=True)
 
 	class Meta:
 		abstract = True
-
 
 	def __str__(self):
 		return str(self.designation)
@@ -166,12 +147,11 @@ class Agent(UserProfile, MPTTModel):
 	def __str__(self):
 		return str(self.user)
 
-class AgentPlayer(models.Model):
+class AgentPlayer(HistoricalModels):
 	agent = models.ForeignKey(Agent, related_name='%(class)s_agent', on_delete=models.PROTECT)
 	name = models.CharField(max_length=60)
 	mobile = PhoneNumberField(blank=True, null=True)
 	created_on = models.DateTimeField(auto_now_add=True,)
-	history = HistoricalRecords(bases=[IPAddressHistoricalModel,])
 
 	def __str__(self):
 		return str(self.agent)
