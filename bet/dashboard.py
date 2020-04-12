@@ -48,11 +48,11 @@ class CustomIndexDashboard(Dashboard):
 			children=(
 				(
 					'Generate Manager Registration Link', 
-					reverse_lazy('master:users:admin:register-user-send-email')
+					reverse_lazy('users:admin:register-user-send-email')
 				),
 				(
 					'Generate Agent Registration Link', 
-					reverse_lazy('master:users:admin:agent-registration-url')
+					reverse_lazy('users:admin:agent-registration-url')
 				),
 			)
 		))

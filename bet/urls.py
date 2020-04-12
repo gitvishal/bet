@@ -20,5 +20,5 @@ urlpatterns = [
 	path('grappelli/', include('grappelli.urls')), # grappelli URLS
 	path('admin/', admin.site.urls),
 	path('accounts/', include('registration.backends.default.urls')),
-	path('bet/', include('master.viewsets.urls')),
+	path('betting/', include('master.viewsets.urls')),
 ]

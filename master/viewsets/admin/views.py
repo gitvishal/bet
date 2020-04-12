@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 class RegistrationURLView(BaseRegistrationURLView):
 	template_name = 'master/admin/registration_form_email.html'
 	success_url = reverse_lazy('admin:index')
-	registration_path = 'master:users:manager:registration'
+	registration_path = 'users:manager:registration'
 	title = _('Form to Send Email For Registration as Manager')
 
 	def email_context(self, form):

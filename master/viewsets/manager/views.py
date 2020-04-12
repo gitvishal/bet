@@ -6,11 +6,11 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 class RegistrationView(BaseRegistrationView):
-	success_url = reverse_lazy('master:users:manager:home')
+	success_url = reverse_lazy('users:manager:home')
 
 class RegistrationURLView(BaseRegistrationURLView):
-	success_url = reverse_lazy('master:users:manager:home')
-	registration_path = 'master:users:manager:registration'
+	success_url = reverse_lazy('users:manager:home')
+	registration_path = 'users:manager:registration'
 	title = _('Form to Send Email For Registration as Supervisor')
 
 	def email_context(self, form):

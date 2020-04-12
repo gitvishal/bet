@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 from django.urls import reverse_lazy
 
 class RegistrationView(BaseRegistrationView):
-	success_url = reverse_lazy('master:users:employee:home')
+	success_url = reverse_lazy('users:employee:home')
 
 class HomeView(TemplateView):
 	template_name = 'index.html'

@@ -3,12 +3,13 @@ from registration.backends.default.views import RegistrationView as BaseRegistra
 from django.views.generic import TemplateView
 from .forms import RegistrationForm
 from django.urls import reverse_lazy
-from master.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class RegistrationView(BaseRegistrationView):
 	model = User
 	form_class = RegistrationForm
-	success_url = reverse_lazy('master:users:onlineplayer:home')
+	success_url = reverse_lazy('users:onlineplayer:home')
 
 class HomeView(TemplateView):
 	template_name = 'master/online_player/index.html'

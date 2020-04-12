@@ -13,16 +13,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-
-from django.shortcuts import render 
-from django.views.generic import View, RedirectView, TemplateView
 from django.core.exceptions import DisallowedHost, PermissionDenied
-from master.utils.queryset import get_instance_or_none
-from django.utils.translation import ugettext_lazy as _
-from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
-from django.conf import settings
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -103,7 +94,7 @@ class RegistrationURLView(FormView):
 class AgentRegistrationURLView(RegistrationURLView):
 	form_class = AgentRegistrationURLForm
 	title = _('Form to Send Email For Registration as Agent')
-	registration_path = 'master:users:agent:registration'
+	registration_path = 'users:agent:registration'
 
 	def get_form_kwargs(self):
 		kwargs = super().get_form_kwargs()
