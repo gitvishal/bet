@@ -1,8 +1,13 @@
 from master.viewsets.views import (AgentRegistrationURLView as BaseAgentRegistrationURLView, 
-	RegistrationURLView as BaseRegistrationURLView)
+	RegistrationURLView as BaseRegistrationURLView, ManagementHomeView as BaseManagementHomeView)
+from .permissions import UserPermissionMixin
+from django.views.generic import TemplateView, View
 from master.models import User, Manager
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
+
+class DashboardView(UserPermissionMixin, BaseManagementHomeView):
+	template_name = 'master/admin/index.html'
 
 class RegistrationURLView(BaseRegistrationURLView):
 	template_name = 'master/admin/registration_form_email.html'

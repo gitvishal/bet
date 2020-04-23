@@ -1,6 +1,9 @@
 from django.contrib import admin, messages
 from .models import *
 from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse_lazy
+
+admin.site.site_url = reverse_lazy('users:admin:dashboard')
 
 class CustomModelAdmin(admin.ModelAdmin):
 	def has_add_permission(self, request):

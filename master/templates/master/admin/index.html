@@ -1,0 +1,8 @@
+{% extends "master/management_home.html" %}
+{% load static %}
+{% load i18n %}
+{% load bootstrap4 %}
+
+{% block title %}{% trans "Betting Admin" %}{% endblock %}
+{% block home-url %}{% url 'admin:index' %}{% endblock %}
+{% block dashboard %}{% url 'users:admin:dashboard' %}{% endblock %}

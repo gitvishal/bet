@@ -17,11 +17,14 @@ from django.core.exceptions import DisallowedHost, PermissionDenied
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-class HomeView(TemplateView):
-	template_name = 'index.html'
-
 class ManagementHomeView(TemplateView):
 	template_name = 'master/management_home.html'
+
+	def get_context_data(self, *args, **kwargs):
+		context = super().get_context_data(*args, **kwargs)
+		context['unread_message'] = 199
+		context['pending_task'] = 100
+		return context
 
 @method_decorator([login_required(login_url=settings.LOGIN_URL),], name='dispatch')
 class HomeRemoteRedirectView(RedirectView):
@@ -39,7 +42,7 @@ class HomeRemoteRedirectView(RedirectView):
 		elif self.request.user.user_type == User.ONLINE_PLAYER:
 			return reverse_lazy('users:onlineplayer:home')
 		else:
-			return reverse_lazy('users:index')
+			return reverse_lazy('index')
 
 class RegistrationView(BaseRegistrationView):
 	model = User

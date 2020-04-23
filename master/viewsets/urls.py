@@ -4,7 +4,6 @@ from .views import AgentRegistrationURLView, HomeRemoteRedirectView
 app_name = 'users'
 
 urlpatterns = [
-	path('home/', HomeRemoteRedirectView.as_view(), name='index'),
 	path('home-redirect/', HomeRemoteRedirectView.as_view(), name='home'),
 	path('manager/', include('master.viewsets.manager.urls')),
 	path('supervisor/', include('master.viewsets.supervisor.urls')),
