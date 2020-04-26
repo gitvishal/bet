@@ -32,10 +32,10 @@
   <!-- Navigation -->
   <nav class="navbar navbar-light bg-light static-top">
     <div class="container">
-      <a class="navbar-brand" href="#">{% trans "Betting" %}</a>
+      <a class="navbar-brand" href="{% url 'home' %}">{% trans "Betting" %}</a>
       {% block nav %}
         {% if user.authenticated %}
-          <a class="btn btn-primary" href="{% url 'auth_logout' %}}">{% trans "logout" %} </a>
+          <a class="btn btn-primary" href="{% url 'auth_logout' %}">{% trans "logout" %} </a>
         {% endif %}
       {% endblock %}
     </div>
@@ -54,10 +54,10 @@
             <form>
               <div class="form-row">
                 <div class="col-6 col-md-6 mb-2 mb-md-0">
-                  <button type="submit" class="btn btn-block btn-lg btn-primary">Sign up or Sign in as Player</button>
+                  <a href="{% url 'users:onlineplayer:auth_login' %}" class="btn btn-block btn-lg btn-primary">Sign up or Sign in as Player</a>
                 </div>
                 <div class="col-6 col-md-5">
-                  <button type="submit" class="btn btn-block btn-lg btn-primary">Sign in as Hierarchy user</button>
+                  <a href="{% url 'users:auth_login' %}" class="btn btn-block btn-lg btn-primary">Sign in as Hierarchy user</a>
                 </div>
               </div>
             </form>

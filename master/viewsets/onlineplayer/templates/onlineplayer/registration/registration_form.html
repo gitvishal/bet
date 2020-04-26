@@ -1,0 +1,51 @@
+{% extends "registration/registration_base.html" %}
+{% load i18n %}
+{% load bootstrap4 %}
+
+{% block title %}{% trans "Register for an account" %}{% endblock %}
+
+{% block nav %}
+    <li>{% trans "Already Sign In" %} <a href="{% url 'users:onlineplayer:auth_login' %}">{% trans "Sign In" %}</a>.</li>
+{% endblock %}
+
+{% block container %}
+<form method="post" action="" class="form-vertical">
+    <div class="module-head">
+        <h3>{% trans 'Sign in' %}</h3>
+    </div>
+    {% csrf_token %}
+   
+    <div class="module-body">
+        {% for field in form %}
+            <div class="control-group">
+                <div class="controls row-fluid">
+                     {% render_field field placeholder=field.label data-toggle="tooltip" title=field.help_text class+="span12" %}
+                     {{ field.errors }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="module-foot">
+        <div class="control-group">
+            <div class="controls clearfix">
+                <button type="submit" class="btn btn-primary pull-right">{% trans 'Sign up' %}</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+
+
+{% comment %}
+**registration/registration_form.html**
+Used to show the form users will fill out to register. By default, has
+the following context:
+
+``form``
+    The registration form. This will be an instance of some subclass
+    of ``django.forms.Form``; consult `Django's forms documentation
+    <http://docs.djangoproject.com/en/dev/topics/forms/>`_ for
+    information on how to display this in a template.
+{% endcomment %}

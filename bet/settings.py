@@ -51,8 +51,8 @@ THIRDPARTY_APPS = [
 	'crispy_forms',
 	'widget_tweaks',
 ]
-
-BETTING_APPS = ['master',]
+MASTER = 'master'
+BETTING_APPS = [MASTER,]
 
 DJANGO_APPS = [
 	'django.contrib.admin',
@@ -77,10 +77,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'bet.urls'
 
+MASTER_APPS = ['admin', 'agent', 'employee', 'manager', 'onlineplayer', 'supervisor', ]
+IN_APP_DIRS = [ os.path.join(BASE_DIR, MASTER, 'viewsets', IA, 'templates') for IA in MASTER_APPS ]
+
 TEMPLATES = [
 	{
 		'BACKEND': 'django.template.backends.django.DjangoTemplates',
-		'DIRS': [os.path.join(BASE_DIR, 'templates'),],
+		'DIRS': [os.path.join(BASE_DIR, 'templates'),] + IN_APP_DIRS,
 		'APP_DIRS': True,
 		'OPTIONS': {
 			'context_processors': [
@@ -154,7 +157,9 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "bet", "static"), )
 
 AUTH_USER_MODEL = "master.User"
 ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
-REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
+REGISTRATION_AUTO_LOGIN = True # Automatically log the user in
+from django.urls import reverse_lazy
+LOGIN_URL = reverse_lazy('home')
 
 SITE_ID = 1
 

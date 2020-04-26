@@ -42,7 +42,7 @@ class HomeRemoteRedirectView(RedirectView):
 		elif self.request.user.user_type == User.ONLINE_PLAYER:
 			return reverse_lazy('users:onlineplayer:home')
 		else:
-			return reverse_lazy('index')
+			return reverse_lazy('user:home')
 
 class RegistrationView(BaseRegistrationView):
 	model = User
