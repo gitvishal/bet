@@ -64,7 +64,7 @@ class User(HistoricalModels, AbstractUser):
 
 class UserProfile(HistoricalModels):
 	designation = models.CharField(max_length=70, default='no designation')
-	bank_details = encrypt(RichTextField(blank=True, null=True))
+	bank_details = encrypt(JSONField(blank=True, null=True))
 
 	class Meta:
 		abstract = True
@@ -118,7 +118,7 @@ class OnlinePlayer(UserProfile):
 	user = models.OneToOneField(User, related_name='%(class)s_player', 
 		on_delete=models.PROTECT, verbose_name=_('Player'),
 		limit_choices_to={'user_type': User.ONLINE_PLAYER})
-	monitoring_user = models.OneToOneField(User, related_name='%(class)s_moniter', 
+	monitoring_user = models.ForeignKey(User, related_name='%(class)s_moniter', 
 		on_delete=models.PROTECT, limit_choices_to={'user_type__in': User.ALL_STAFF_USER})
 
 	class Meta:

@@ -1,0 +1,31 @@
+{% extends "onlineplayer/home.html" %}
+{% load static %}
+{% load table_tags %}
+{% load bootstrap4 %}
+{% load i18n %}
+
+{% block container %}
+<section class="testimonials text-center bg-light">
+	<div class="container">
+		<h2 class="mb-5">{% trans "Bank Details" %}</h2>
+		<div class="row">
+		  <div class="col-lg-12">
+		  	<form method="post" action="{% url 'users:onlineplayer:bank-details' %}">
+				{% csrf_token %}
+				{% bootstrap_form bank_form %}
+				{% buttons %}
+					<button type="submit" class="btn btn-primary">{% trans 'Update or Create Bank Details' %}</button>
+				{% endbuttons %}
+			</form>
+		  </div>
+		</div>
+
+		<h2 class="mb-5">{% trans "Transaction" %}</h2>
+		<div class="row">
+		  <div class="col-lg-12">
+		    {% render_table table %}
+		  </div>
+		</div>
+	</div>
+</section>
+{% endblock %}

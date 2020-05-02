@@ -6,6 +6,7 @@ from .users import OnlinePlayer, Agent, User
 from django_cryptography.fields import encrypt
 from django.utils.translation import ugettext_lazy as _
 from ckeditor.fields import RichTextField
+from django.shortcuts import reverse
 import uuid
 
 class Transaction(HistoricalModels):
@@ -60,4 +61,7 @@ class OnlinePlayerBalanceAccount(BalanceAccount):
 
 	class Meta:
 		unique_together = ('player', 'transaction',)
+
+	# def get_absolute_url(self):
+	# 	return reverse('djangobin:trending_snippets', args=[self.slug])
 

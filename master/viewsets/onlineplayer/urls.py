@@ -17,7 +17,14 @@ account_patterns = [
 		name='registration'),
 ]
 
+ajax_patterns = [
+	path('transaction/', views.AccountFeedDataView.as_view(), name='transaction'),
+]
+
 urlpatterns = [
 	path('home', views.HomeView.as_view(), name='home'),
+	path('transaction/', views.AccountView.as_view(), name='transaction'),
+	path('bank-details/', views.BankFormView.as_view(), name='bank-details'),
 	path('accounts/', include(account_patterns)),
+	path('ajax/', include(ajax_patterns)),
 ]

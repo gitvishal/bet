@@ -50,9 +50,11 @@ THIRDPARTY_APPS = [
 	'qr_code',
 	'crispy_forms',
 	'widget_tweaks',
+	'table',
 ]
 MASTER = 'master'
-BETTING_APPS = [MASTER,]
+GAMES = 'games'
+BETTING_APPS = [MASTER, GAMES,]
 
 DJANGO_APPS = [
 	'django.contrib.admin',

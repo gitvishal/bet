@@ -40,6 +40,8 @@
       {% endblock %}
     </div>
   </nav>
+
+{% block header %}
   
   {% if not user.authenticated %}
     <header class="masthead text-white text-center">
@@ -66,6 +68,7 @@
       </div>
     </header>
   {% endif %}
+{% endblock %}
 
   <!-- Testimonials -->
   {% block container %}

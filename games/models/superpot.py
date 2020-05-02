@@ -1,9 +1,9 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from autoslug import AutoSlugField
-from ..master import HistoricalModels
-from ..users import AgentPlayer, OnlinePlayer, User
-from ..payments import AgentBalanceAccount, OnlinePlayerBalanceAccount
+from master.models.master import HistoricalModels
+from master.models.users import AgentPlayer, OnlinePlayer, User
+from master.models.payments import AgentBalanceAccount, OnlinePlayerBalanceAccount
 from django.utils.translation import ugettext_lazy as _
 
 
