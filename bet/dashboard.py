@@ -42,11 +42,11 @@ class CustomIndexDashboard(Dashboard):
 					_('SuperPot'),
 					column=1,
 					models=(
-						'master.models.games.superpot.SuperPotEvent', 
-						'master.models.games.superpot.SuperPot',
-						'master.models.games.superpot.SuperPotSlip',
-						'master.models.games.superpot.AgentPlayerSuperPotBet',
-						'master.models.games.superpot.OnlinePlayerSuperPotBet',
+						'games.models.superpot.SuperPotEvent', 
+						'games.models.superpot.SuperPot',
+						'games.models.superpot.SuperPotSlip',
+						'games.models.superpot.AgentPlayerSuperPotBet',
+						'games.models.superpot.OnlinePlayerSuperPotBet',
 					),
 				),
 				modules.ModelList(

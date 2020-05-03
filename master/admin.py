@@ -1,4 +1,4 @@
-from django.contrib import admin, messages
+from django.contrib import admin
 from .models import *
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse_lazy

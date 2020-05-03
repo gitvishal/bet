@@ -51,6 +51,7 @@ THIRDPARTY_APPS = [
 	'crispy_forms',
 	'widget_tweaks',
 	'table',
+	'multiselectfield',
 ]
 MASTER = 'master'
 GAMES = 'games'

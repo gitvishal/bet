@@ -1,1 +1,1 @@
-from .superpot import SuperPotEvent, SuperPot, SuperPotSlip, AgentPlayerSuperPotBet, OnlinePlayerSuperPotBet
+from .superpot import SuperPotEvent, SuperPot, AgentPlayerSuperPotBet, OnlinePlayerSuperPotBet
