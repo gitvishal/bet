@@ -32,7 +32,7 @@
   <!-- Navigation -->
   <nav class="navbar navbar-light bg-light static-top">
     <div class="container">
-      <a class="navbar-brand" href="{% url 'home' %}">{% trans "Betting" %}</a>
+      <a class="navbar-brand" href="{% url 'users:home' %}">{% trans "Betting" %}</a>
       {% block nav %}
         {% if user.authenticated %}
           <a class="btn btn-primary" href="{% url 'auth_logout' %}">{% trans "logout" %} </a>

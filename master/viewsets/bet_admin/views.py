@@ -1,4 +1,4 @@
-from master.viewsets.views import (AgentRegistrationURLView as BaseAgentRegistrationURLView, 
+from master.views import (AgentRegistrationURLView as BaseAgentRegistrationURLView, 
 	RegistrationURLView as BaseRegistrationURLView, ManagementHomeView as BaseManagementHomeView)
 from .permissions import UserPermissionMixin
 from django.views.generic import TemplateView, View
@@ -7,10 +7,10 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 class DashboardView(UserPermissionMixin, BaseManagementHomeView):
-	template_name = 'master/admin/index.html'
+	template_name = 'bet_admin/dashboard.html'
 
 class RegistrationURLView(BaseRegistrationURLView):
-	template_name = 'master/admin/registration_form_email.html'
+	template_name = 'bet_admin/registration_form_email.html'
 	success_url = reverse_lazy('admin:index')
 	registration_path = 'users:manager:registration'
 	title = _('Form to Send Email For Registration as Manager')
@@ -31,5 +31,5 @@ class RegistrationURLView(BaseRegistrationURLView):
 		return context
 
 class AgentRegistrationURLView(BaseAgentRegistrationURLView):
-	template_name = 'master/admin/registration_form_email.html'
+	template_name = 'bet_admin/registration_form_email.html'
 	success_url = reverse_lazy('admin:index')

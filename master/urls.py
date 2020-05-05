@@ -13,6 +13,6 @@ urlpatterns = [
 	path('onlineplayer/', include('master.viewsets.onlineplayer.urls')),
 	path('agent/', include('master.viewsets.agent.urls')),
 	path('agent-registration/', AgentRegistrationURLView.as_view(), name='agent-register'),
-	path('admin/', include('master.viewsets.admin.urls')),
+	path('admin/', include('master.viewsets.bet_admin.urls')),
 	path('accounts/', include('registration.backends.default.urls')),
 ]

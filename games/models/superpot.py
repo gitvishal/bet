@@ -10,14 +10,13 @@ from django.utils.translation import ugettext_lazy as _
 
 class SuperPotEvent(HistoricalModels):
 
-	SUNDAY = 'sunday'
-	MONDAY = 'monday'
-	TUESDAY = 'tuesday'
-	WEDNESDAY = 'wednesday'
-	THURSDAY = 'thursday'
-	FRIDAY = 'friday'
-	SATURDAY = 'saturday'
-
+	MONDAY = 1
+	TUESDAY = 2
+	WEDNESDAY = 3
+	THURSDAY = 4
+	FRIDAY = 5
+	SATURDAY = 6
+	SUNDAY = 7
 
 	DAY_CHOICES = (
 		(None, _('---- default(Everyday) ----')), 

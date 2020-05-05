@@ -80,7 +80,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'bet.urls'
 
-MASTER_APPS = ['admin', 'agent', 'employee', 'manager', 'onlineplayer', 'supervisor', ]
+MASTER_APPS = ['bet_admin', 'agent', 'employee', 'manager', 'onlineplayer', 'supervisor', ]
 IN_APP_DIRS = [ os.path.join(BASE_DIR, MASTER, 'viewsets', IA, 'templates') for IA in MASTER_APPS ]
 
 TEMPLATES = [
@@ -161,8 +161,8 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "bet", "static"), )
 AUTH_USER_MODEL = "master.User"
 ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
 REGISTRATION_AUTO_LOGIN = True # Automatically log the user in
-from django.urls import reverse_lazy
-LOGIN_URL = reverse_lazy('home')
+# from django.urls import reverse_lazy
+# LOGIN_URL = reverse_lazy('users:home')
 
 SITE_ID = 1
 

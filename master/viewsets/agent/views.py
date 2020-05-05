@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from master.viewsets.views import (RegistrationView as BaseRegistrationView, 
+from master.views import (RegistrationView as BaseRegistrationView, 
 	RegistrationURLView as BaseRegistrationURLView)
 from django.views.generic import TemplateView
 from .forms import UserCreationForm

@@ -1,4 +1,4 @@
-from master.viewsets.forms import UserCreationForm as BaseUserCreationForm
+from master.forms import UserCreationForm as BaseUserCreationForm
 from master.utils.queryset import get_instance_or_none
 import sys
 
